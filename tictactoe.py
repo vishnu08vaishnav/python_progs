@@ -83,7 +83,7 @@ def empty_spaces():
 
 def new_game():
     
-    global player 
+    global player    
     print("Game started")
     player = random.choice(players)
 
@@ -109,7 +109,7 @@ buttons = [[0,0,0] ,
           [0,0,0],
          [0,0,0]]
 
-label = Label(text="",font = ('consolas',40))
+label = Label(text="tic tac toe",font = ('consolas',40))
 label.pack(side="top")
 
 reset_button = Button(text="restart",font=('consolas',40),command=new_game)
