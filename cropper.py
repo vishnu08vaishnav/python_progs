@@ -61,8 +61,10 @@ def next_turn(snake, food):
     if x == food.coordinates[0] and y == food.coordinates[1]:
 
         global score
+        global SPEED
 
         score += 1
+        SPEED = max(SPEED-5, 10)
 
         label.config(text="Score:{}".format(score))
 
@@ -142,7 +144,8 @@ def game_over():
     )
 
 def restart_game():
-    global score, direction, snake, food , paused
+    global SPEED, score, direction, snake, food
+    SPEED = 50
     score = 0
     direction = 'down'
     label.config(text="Score:{}".format(score))  
