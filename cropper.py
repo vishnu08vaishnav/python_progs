@@ -7,8 +7,8 @@ GAME_HEIGHT = 400
 SPEED = 50
 SPACE_SIZE = 10
 BODY_PARTS = 3
-SNAKE_COLOR = "#00FF00"
-FOOD_COLOR = "#FF0000"
+SNAKE_COLOR = "#0400FF"
+FOOD_COLOR = "#00FF33"
 BACKGROUND_COLOR = "#000000"
 
 
@@ -124,8 +124,12 @@ def check_collisions(snake):
 def game_over():
 
     canvas.delete(ALL)
+    save_score(score)
     canvas.create_text(canvas.winfo_width()/2, canvas.winfo_height()/2,
                        font=('consolas',70), text="GAME OVER", fill="red", tag="gameover")
+
+    history_button = Button(window, text="View Game History", font=('consolas', 14), command=show_history)
+    canvas.create_window(canvas.winfo_width()/2, canvas.winfo_height()/2 + 30, window=history_button)
 
     restart_button = Button(
         window,
@@ -153,6 +157,35 @@ def restart_game():
     snake = Snake()
     food = Food()   
     next_turn(snake, food)
+
+def show_history():
+    history_window = Toplevel(window)
+    history_window.title("Game History")
+    history_window.geometry("300x400")
+    history_window.config(bg=BACKGROUND_COLOR)
+
+    title_label = Label(history_window, text="--- Match History ---", font=('consolas', 16), bg=BACKGROUND_COLOR, fg="white")
+    title_label.pack(pady=10)
+
+    
+    text_area = Text(history_window, font=('consolas', 10), bg="black", fg="white", width=35, height=18)
+    text_area.pack(padx=10, pady=10)
+
+    try:
+        with open("game_history.txt", "r") as file:
+            history = file.read()
+            text_area.insert(END, history if history else "No games played yet!")
+    except FileNotFoundError:
+        text_area.insert(END, "No history found. Play a game first!")
+
+    text_area.config(state=DISABLED) 
+
+from datetime import datetime
+
+def save_score(score):
+    now = datetime.now().strftime("%Y-%m-%d %H:%M")
+    with open("game_history.txt", "a") as file:
+        file.write(f"Date: {now} | Score: {score}\n")
 
 window = Tk()
 window.title("Snake game")
